@@ -1,0 +1,71 @@
+
+ 
+
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block content %}
+
+<section class="section-conten padding-y bg mb-5 mt-3">
+
+  <div class="container">
+    <div class="row">
+    <aside class="col-md-3">
+      <!--   SIDEBAR   -->
+      <ul class="list-group">
+        <a class="list-group-item bg-light" href="{% url 'userDashboard' %}"> Dash Board </a>
+        <a class="list-group-item" href="{% url 'myOrders' %}"  style="color: #4B3049;"> My Orders </a>
+        <a class="list-group-item" href="{% url 'myAddress' %}" style="color:#4B3049;"> My Address </a>
+        <a class="list-group-item" href="{% url 'editProfile' %}" style="color:#4B3049;"> Edit Profile </a>
+        <a class="list-group-item" href="{% url 'changePassword' %}" style="color: #4B3049;">Change Password </a>
+      </ul>
+      <br>
+     
+      <!--   SIDEBAR .//END   -->
+    </aside>
+    <main class="col-md-9">
+      <article class="card">
+      <header class="card-header">
+        <strong class="d-inline-block mr-3">Logged in as :</strong>
+        <span>{{user.first_name}}</span>
+      </header>
+     
+      <div class="card-body">
+        <div class="row"> 
+        <div class="col-md-6">
+          <div class="card" style="text-align: center;">
+            <div class="card-body">
+              <h5 class="card-title mb-3"><b>Total Orders</b></h5>
+              <h4 class="mb-4">{{orders_count}}</h4>
+              <a class="" href="{% url 'myOrders' %}">View Orders</a>
+            </div>
+          </div>
+        </div>
+  
+        <div class="col-md-6">
+          <div class="card" style="text-align: center;">
+            <div class="card-body">
+            <img src="{% static 'images/author/author_2.png.' %}" width="50" height="50" style="border: radius 50%;"  alt="" >
+            <p class="mb-0">{{user.email}}</p>
+            <p class="mt-0">{{user.first_name}}  {{user.last_name}}</p>
+          
+          </div>
+          </div>
+        </div>
+        </div> <!-- row.// -->
+      </div> <!-- card-body .// -->
+  
+      
+       <!-- table-responsive .end// -->
+      </article> <!-- order-group.// --> 
+    </main>
+  </div> <!-- row.// -->
+  </div>
+  
+  
+  </section>
+  <!-- ========================= SECTION CONTENT END// ========================= -->
+  
+
+{% endblock content %}

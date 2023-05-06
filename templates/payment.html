@@ -1,0 +1,194 @@
+{% extends 'base.html'%}
+
+
+{%block title %}
+pillow mart
+{% endblock %}
+{%block content %}
+{% load static %}
+<!-- breadcrumb part start-->
+<section class="breadcrumb_part">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="breadcrumb_iner">
+                    <h2>Payment</h2>
+                </div>
+            </div>
+        </div>
+    </div>
+  </section>
+  <!-- breadcrumb part end-->
+  
+  <!-- ##### payment Area Start ##### -->
+  <div class="">
+    <div class="container"style="margin-left:200px;">
+               <div class="" style="">
+                    <div class="cart-page-heading p-3">
+                        <h4 class="mb-3 ">Bill</h4></div>
+                    <ul class=" mb-4 col-12 order_box" style="border-top:1px solid #EBEBEB;width:800px;">
+                        <li class="pt-5" ><span>Total</span> <span>$ {{total}}</span></li>
+                        <li><span>Tax</span> <span>$ {{tax}}</span></li>
+                        {% if coupon_discount %}
+
+                        <div class="cart_subtotal d-flex justify-content-between">
+                            <p>Discount :</p>
+                            <span class="cart_amount">-₹{{coupon_discount}}</span>
+                        </div>
+
+                        {% endif %}
+                        <li><span>Grand Total</span> <span>${{grand_total}}</span></li>
+                        <li class="mb-5"><span>Order Note</span>
+                            {% if order.order_note %}
+                            <span>{{order.order_note}}</span></li>
+                            {% endif %}
+                       <br>
+                        <table class="table  pt-5 order_box">
+                            <thead class="text-white" style="background-color: #B08EAD;">
+                              <tr>
+                                <th scope="col" class="fw-100">Image</th>
+                                <th scope="col">Name</th>
+                                <th scope="col">Price</th>
+                                <th scope="col" class="text-center">Quantity</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                               <tr>
+                                {% for i in cart_items %}
+                                <th scope="row"><img src="{{i.product.images.url}} " style="height:40px; width:40px;" alt=""></th>
+                                <td>{{i.product.product_name}}</td>
+                                <td>${{i.total}}</td> 
+                                <td class="text-center">{{i.quantity}}</td>
+                              </tr>
+                            {% endfor %}
+                            </tbody>
+                      </table>  
+                      <li class="mb-3 order_box" style="border-top:1px solid #EBEBEB;"><span> Shipping Adress</span> <span >
+                        {{order.first_name}} {{order.last_name}} <br>
+                        {{order.adress_line_1}} <br>
+                        {{order.phone}},{{order.email}} <br>
+                        {{order.city}},{{order.state}} <br>
+                       
+                    </span>
+                </li>               
+                    </ul>
+                    <button  class="btn ml-3 mb-3 col-11 btn-warning " style="width: 720px;border-radius:20px;" data-toggle="modal" data-target="#exampleModal">
+                        <b class="text-white">CASH ON DELIVERY</b>
+                    </button>
+                    <!-- paypal buttons -->
+                    <div id="paypal-button-container"></div>
+                        <!-- paypal buttons will load here -->
+                        </div>  
+                  </form>
+                 
+              
+        <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="exampleModalLabel">CASH ON DELIVERY</h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body">
+                  <p>Confirm Your Order ?</p>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                  <a href="{% url 'cash_on_delivery' order_number %}" type="button" class="btn btn-primary">Confirm</a>
+                  
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+    </div>  
+</div> 
+ <!-- ##### payment Area End ##### -->
+
+
+<script>
+    function getCookie(name){
+        let cookieValue = null;
+        if(document.cookie && document.cookie !== ''){
+            const cookies = document.cookie.split(';');
+            for(let i = 0; i<cookies.length; i++){
+                const cookie = cookies[i].trim();
+                if (cookie.substring(0,name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    } 
+    var amount = "{{grand_total}}"
+    var url = "{% url 'payment' %}"
+    var csrftoken = getCookie('csrftoken');
+    var orderID="{{order.order_number}}"
+    var payment_method = 'paypal'
+    var redirect_url="{% url 'orderCompleted' %}"
+    paypal.Buttons({
+        style: {
+            color:  'blue',
+            shape:  'pill',
+            label:  'pay',
+            height: 40
+        },
+
+       // Set up the transaction
+       createOrder: function(data, actions) {
+           return actions.order.create({
+               purchase_units: [{
+                   amount: {
+                       value: amount,
+                   }
+               }]
+           });
+       },
+
+       // Finalize the transaction
+       onApprove: function(data, actions) {
+           return actions.order.capture().then(function(orderData) {
+               // Successful capture! For demo purposes:
+               console.log('Capture result', orderData, JSON.stringify(orderData, null, 2));
+               var transaction = orderData.purchase_units[0].payments.captures[0];
+               alert('Transaction '+ transaction.status + ': ' + transaction.id + '\n\nSee console for all available details');
+               sendData();
+               function sendData(){
+                fetch(url,{
+                    method : "POST",
+                    headers:{
+                      "Content-type":"application/json",
+                      "X-CSRFToken":csrftoken,
+                    },
+                  body:JSON.stringify({
+                    orderID:orderID,
+                    transID:orderData.id,
+                    payment_method:payment_method,
+                    status:orderData.status,
+
+
+                  }),
+
+                })
+                .then((response) => response.json())
+                .then((data) => {
+                    window.location.href = redirect_url + '?order_number='+data.order_number + '&payment_id='+data.transId;
+                });
+               }
+
+
+               // Replace the above to show a success message within this page, e.g.
+               // const element = document.getElementById('paypal-button-container');
+               // element.innerHTML = '';
+               // element.innerHTML = '<h3>Thank you for your payment!</h3>';
+               // Or go to another URL:  actions.redirect('thank_you.html');
+           });
+       }
+
+
+   }).render('#paypal-button-container');
+</script>
+{% endblock %}

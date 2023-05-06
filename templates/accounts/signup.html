@@ -1,0 +1,127 @@
+{% extends 'base.html'%}
+
+
+{%block title %}
+signup
+{% endblock %}
+
+{%block content %}
+{% load static %}
+ <!-- breadcrumb part start-->
+ <section class="breadcrumb_part">
+  <div class="container">
+      <div class="row">
+          <div class="col-lg-12">
+              <div class="breadcrumb_iner">
+                  <h2>signup</h2>
+              </div>
+          </div>
+      </div>
+  </div>
+</section>
+<!-- breadcrumb part end-->
+
+<!--================login_part Area =================-->
+<section class="login_part section_padding  px-5" style="margin-left:400px;">
+  <div class="container" >
+    <div class="card-body shadow-5 text-center  text-white" style="width:400px;background-color:#4B3049">
+      <div class="row align-items-center">
+          
+          <div class="col-lg-12 col-md-12">
+              <div class="login_part_form">
+                  <div class="login_part_form_iner">
+                      <h3 class="text-white"> <br>
+                          Please Sign up now</h3>
+                    
+                      
+                      <form method="POST" action="{% url 'register' %}">
+              
+                        {% csrf_token %}
+                        <!-- 2 column grid layout with text inputs for the first and last names -->
+                        <div class="row align-items-center">
+                          <div class="col-md-12 mb-4 form-group-lg p_star-lg">
+                            <div class="form-outline">
+                            <label class="form-label" for="form3Example1">First name </label>
+                             {{ form.first_name }}
+                              
+                            </div>
+                          </div>
+                          <div class="col-md-12 mb-4 form-group p_star">
+                            <div class="form-outline">
+                                <label class="form-label" for="form3Example2">Last name</label>
+                            {{ form.last_name }}
+                            
+                            </div>
+                          </div>
+                      
+          
+                        <!-- Email input -->
+                        <div class="col-md-12 mb-4  form-group p_star">
+                        <div class="form-outline">
+                            <label class="form-label" for="form3Example3">Email address</label>
+                         {{ form.email}}<br>
+                          
+                        </div>
+                       </div>
+                          <!-- phone number  -->
+                          <div class="col-md-12 mb-4 form-group p_star">
+                        <div class="form-outline">
+                            <label class="form-label" for="form3Example3">Phone Number</label>
+                         {{form.phone_number}}<br>
+                          
+                        </div>
+                    </div>
+                        
+                        <!-- Password input -->
+                        <div class="col-md-12 mb-4 form-group p_star">
+                        <div class="form-outline">
+                            <label class="form-label " for="form3Example4">Password</label>
+                          {{ form.password }}<br>
+                          
+                        </div>
+                    </div>
+                      <!-- confirm Password input -->
+                      <div class="col-md-12 mb-4 ">
+                      <div class="form-outline">
+                        <label class="form-label" for="form3Example4"> confirm Password</label>
+                        {{ form.confirm_password }}<br>
+                       
+                      </div>
+                    </div>
+                        
+                        
+                        <div id="message" class="container">
+                          {% if messages %}
+                              {% for message in messages %}
+                              <div {% if message.tags %} class="  alert alert-{{ message.tags }}"{% endif %} role="alert">
+                                  <button type="button" class="close" data-dismiss="alert" onclick="this.parentNode.remove()">
+                                      <span aria-hidden="true">&times;</span>
+                                  </button>
+                                      {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}Error: {% endif %}
+                                      {{ message }}
+                              </div>
+                              {% endfor %}
+                          {% endif %}
+                      </div>
+                         
+                        <!-- Submit button -->
+                        <div id="message" class="container text-danger" style="list-style: none !important;">
+                        {{ form.email.errors }}
+                        {{ form.non_field_errors }}
+                       </div>
+                       <a class="px-5" href="{% url 'login'%}"><button type="submit" class="btn btn-primary btn-block mb-4 align-items-center btn-sm">
+                          Sign up
+                        </button></a>
+                        <p class="tex-center px-5 text-white mb-2">Have an account? <a href="{% url 'login'%}">Login</a></p>
+                    </div>
+                      </form>
+                    </div>
+
+                  </div>
+              </div>
+          </div>
+      </div>
+  </div>
+</section>
+<!--================login_part end =================-->
+{% endblock %}

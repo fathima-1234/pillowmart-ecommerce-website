@@ -1,0 +1,83 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block content %}
+
+<section class="section-conten padding-y bg mb-5 mt-3">
+
+  <div class="container">
+    <div class="row">
+    <aside class="col-md-3">
+      <!--   SIDEBAR   -->
+      <ul class="list-group">
+        <a class="list-group-item bg-light" href="{% url 'userDashboard' %}" style="color:#4B3049;"> Dash Board </a>
+        <a class="list-group-item" href="{% url 'myOrders' %}" style="color:#4B3049;"> My Orders </a>
+        <a class="list-group-item" href="{% url 'myAddress' %}" style="color:#4B3049;"> My Address </a>
+        <a class="list-group-item  active disabled" href=""> Edit Profile </a>
+        <a class="list-group-item" href="{% url 'changePassword' %}" style="color:#4B3049;">Change Password </a>
+      </ul>
+      <br>
+     
+      <!--   SIDEBAR .//END   -->
+    </aside>
+
+    <main class="col-md-9">
+      <article class="card">
+      <header class="card-header">
+        <strong class="d-inline-block">Edit Your Profile </strong>
+      
+      </header>
+      <div class="card-body">
+        <div class="row"> 
+        <div class="col-md-12">
+                 <form action="{% url 'editProfile' %}" method="POST" enctype="multipart/form-data">
+                  {% csrf_token %}
+                  <div class="form-row">
+                      <div class="form-group col-md-6">
+                          <label >First Name</label>
+                         {{form.first_name}}
+                      </div>
+                      <div class="form-group col-md-6">
+                          <label >Last Name</label>
+                          {{form.last_name}}
+                      </div>
+  
+                  </div>
+                  <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label >Email</label>
+                        {{form.email}}
+                    </div>
+                    <div class="form-group col-md-6">
+                          <label >Phone Number</label>
+                          {{form.phone_number}}
+                    </div>
+                         
+                  </div>
+                  <input type="submit" name="" id="" value="Save" class="btn btn-dark">
+  
+                 </form>
+           {% for message in messages %}
+                      <hr />
+                      <p class="text-danger">{{message}}</p>
+                      {% endfor%}
+        
+        </div>
+        </div> <!-- row.// -->
+      </div> <!-- card-body .// -->
+  
+      
+       <!-- table-responsive .end// -->
+      </article> <!-- order-group.// --> 
+    </main>
+
+  </div> <!-- row.// -->
+  </div>
+  
+  
+  </section>
+  <!-- ========================= SECTION CONTENT END// ========================= -->
+  
+
+{% endblock content %}

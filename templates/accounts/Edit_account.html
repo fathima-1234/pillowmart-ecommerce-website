@@ -1,0 +1,82 @@
+{% extends 'base.html'%}
+
+
+{%block title %}
+Edit User
+{% endblock %}
+
+{%block content %}
+{% load static %}
+<section>
+    <div class="container py-5">
+      <div class="row">
+        <div class="col-lg-4">
+          <div class="card mb-4">
+            <div class="card-body text-center"> 
+              {% if userProfile.profile_picture %}
+              <img src="{{userProfile.profile_picture.url}}" 
+              {% else %}
+              <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava3.webp" alt="avatar"
+              {% endif %}
+                class="rounded-circle img-fluid" style="width: 150px;">
+              <h5 class="my-3">{{user.username}}</h5>
+              <div class="d-flex  justify-content-center " style="flex-direction: column;">
+                <a href="#" class=" ms-1 my-2 mx-5"><button type="submit" class="btn_1" style="width: 250px;">Edit Profile</button> </a>
+                <!-- <a href="{% url 'order_history' %}" class=" ms-1 my-2 mx-5"><button type="submit" class="btn_3" style="width: 200px;">Order Hstory</button> </a> -->
+                <a href="{% url 'changePassword' %}" class=" ms-1 my-2 mx-5"><button type="submit" class="btn_1" style="width: 250px;">Edit Password</button> </a>
+              </div>
+            </div>
+          </div>
+           </div>
+           <div class="col-lg-8">
+           <form action="{% url 'edit_account' %}" method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+             <div class="row">
+                 <div class="col-md-6 mb-3">
+                     <label for="first_name">First Name <span>*</span></label>
+                    {{user_form.first_name}}<br>
+                 </div>
+                 <div class="col-md-6 mb-3">
+                     <label for="last_name">Last Name <span>*</span></label>
+                     {{user_form.last_name}}
+                 </div><br>
+                 <div class="col-12 mb-3">
+                  <label for="street_address">Address 1<span>*</span></label>
+                  {{profile_form.address_line_1}}
+                  <label for="street_address">Address 2<span>*</span></label>
+                  {{profile_form.address_line_2}}
+                 </div><br>
+                 <div class="col-6 mb-3">
+                  <label for="images">Profile Picture<span>*</span></label>
+                  {{profile_form.profile_picture}}
+                </div><br>
+                 <div class="col-6 mb-3">
+                  <label for="phone_number">Phone No<span>*</span></label>
+                  {{user_form.phone_number}}
+                </div><br>
+                 <div class="col-6 mb-3">
+                     <label for="city">Town/City <span>*</span></label>
+                     {{profile_form.city}}
+                 </div><br>
+                 <div class="col-6 mb-3">
+                     <label for="state">State<span>*</span></label>
+                     {{profile_form.state}}
+                 </div><br>
+                 <div class="col-4 mb-3">
+                     <label for="state">Country<span>*</span></label>
+                     {{profile_form.country}}
+                 </div><br>
+                 <div class="col-4 mb-3">
+                  <label for="postcode">Postcode <span>*</span></label>
+                  {{profile_form.postcode}}
+              </div>     
+            </div>
+          <button class="btn essence-btn" type="submit">Update</button>  
+       </form>
+      </div>
+    </div>
+</div>
+  </section>
+  <!-- user details ends -->
+
+{% endblock %}

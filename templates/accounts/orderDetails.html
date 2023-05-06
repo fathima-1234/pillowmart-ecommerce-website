@@ -1,0 +1,278 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block content %}
+
+
+<section class="section-conten padding-y bg mb-5 mt-3">
+
+  <div class="container">
+    <div class="row">
+    <aside class="col-md-3">
+      <!--   SIDEBAR   -->
+      <ul class="list-group">
+        <a class="list-group-item" href="{% url 'userDashboard' %}" style="color:#4B3049;"> Dash Board </a>
+        <a class="list-group-item  active" href="{% url 'myOrders' %}"> My Orders </a>
+        <a class="list-group-item" href="{% url 'myAddress' %}" style="color:#4B3049;"> My Address </a>
+        <a class="list-group-item" href="{% url 'editProfile' %}"style="color:#4B3049;"> Edit Profile </a>
+        <a class="list-group-item" href="{% url 'changePassword' %}" style="color:#4B3049; ">Change Password </a>
+       
+      </ul>
+      <br>
+    
+      <!--   SIDEBAR .//END   -->
+    </aside>
+    <main class="col-md-9 mb-3">
+      <article class="card">
+      
+  
+  <header class="card-header d-flex justify-content-between">
+    <strong class="d-inline-block mr-3 btn_1">Order Details</strong>
+
+    <input type="button" class="btn btn_1 btn-sm" id="btnExport" value="Download Invoice" />
+    <!-- Button trigger modal -->
+
+{% if order.status == 'Returned' %}
+<button type="button" class="btn btn-warning disabled">
+  Order Returned!!!
+</button>
+{% elif order.status == 'Delivered' %}
+<div class="d-flex">
+  <button type="button" class="btn btn-success disabled mr-3">
+    Order Delivered.
+  </button>
+  <button type="button" class="btn btn-warning"  data-toggle="modal" data-target="#returnModal">
+    Return Order?
+  </button>
+</div>
+{% elif order.status == 'Order Confirmed' %}
+<button type="button" class="btn btn-danger" data-toggle="modal" data-target="#exampleModal">
+  Cancel Order?
+</button>
+{% elif order.status == 'Cancelled' %}
+<button type="button" class="btn btn-danger disabled">
+  Order Cancelled!!!
+</button>
+{% else %}
+<button type="button" class="btn btn-info disabled">
+  {{order.status}}
+</button>
+{% endif %} 
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Cancel Order?</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        Are you sure to cancel this order #{{order.order_number}}?
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
+        <a type="button" href="{% url 'cancel_order' order.order_number %}" class="btn btn-primary">Yes</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="returnModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Return Order #{{order.order_number}}?</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p>Why are you returning this order?</p>
+
+        <form action="{% url 'return_order' order.order_number %}" method="POST">
+          {% csrf_token %}
+
+        <select name="return_reason" id="return_reason">
+          <option value="Purchased by Mistake">Purchased by Mistake.</option>
+          <option value="Product is damaged">Product is damaged.</option>
+          <option value="Item expired">Item expired.</option>
+          <option value="Delivery is later than expected.">Delivery is later than expected.</option>
+          <option value="Other Reasons">Other Reasons</option>
+        </select>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+        <button type="submit" class="btn btn-warning">Return</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+  
+  </header> 
+      
+
+        <div class="container" style="background: #f1f1f1;" id='invoice'>
+          <div class="row invoice row-printable">
+              <div class="col-md-12">
+                  <!-- col-lg-12 start here -->
+                  <div class="panel panel-default plain" id="dash_0">
+                      <!-- Start .panel -->
+                      <div class="panel-body p30">
+                          <div class="row">
+                              <!-- Start .row -->
+                              <div class="col-lg-6">
+                                  <!-- col-lg-6 start here -->
+                               
+                                  <div class="invoice-details mt-5">
+                                    <div class="well">
+                                        <ul class="list-unstyled mb0">
+                                            <li><strong>Order: </strong> #{{order.order_number}} </li>
+                                            <li><strong>Transaction: </strong>{{order.payment.payment_method}}</li>
+                                            <li><strong>Order Date:</strong> {{order.created_at}}</li>
+                                            <li><strong>Status:</strong> {{order.status}}</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                              </div>
+                              <!-- col-lg-6 end here -->
+                              <div class="col-lg-6">
+                                  <!-- col-lg-6 start here -->
+                                  <div class="invoice-from mt-3">
+                                      <ul class="list-unstyled text-right">
+                                          <li><strong>Invoiced To</strong></li>
+                                          <li>{{order.full_name}}</li>
+                                          <li>{{order.full_address}}</li>
+                                          <li>{{order.district}}</li>
+                                          <li>{{order.state}}</li>
+                                          <li>{{order.pincode}}</li>
+                                      </ul>
+                                  </div>
+                              </div>
+                              <!-- col-lg-6 end here -->
+                              <div class="col-lg-12 mt-5">
+                                  <!-- col-lg-12 start here -->
+                                 
+                                  <div class="invoice-items">
+                                      <div class="table-responsive" style="overflow: hidden; outline: none;" tabindex="0">
+                                          <table class="table table-bordered">
+                                              <thead>
+                                                  <tr>
+                                                      <th class="per70 text-center">Product</th>
+                                                      <th class="per5 text-center">Qty</th>
+                                                      <th class="per5 text-center">Price</th>
+                                                      <th class="per25 text-center">Total</th>
+                                                  </tr>
+                                              </thead>
+                                              <tbody>
+                                                {% for item in order_details %}
+                                                  <tr>
+                                                      {% comment %} <td>{{item.product.product_name}}
+                                                        <p class="text-muted small">
+                                                          {% if item.variations.all %}
+                                                            {% for i in item.variations.all %}
+                                                              {{i.variation_category | capfirst}} : {{i.variation_value | capfirst}} <br>
+                                                            {% endfor %}
+
+                                                          {% endif %}
+                                                        </p>
+                                                      </td> {% endcomment %}
+                                                      <td class="text-center" id="qnty{{forloop.counter}}">{{item.quantity}}</td>
+                                              <td class="text-center"><span>₹</span><span id="price{{forloop.counter}}">{{item.product_price}} </span></td>
+                                              <td class="text-center" id="total{{forloop.counter}}"></td>
+                                                  </tr>
+                                                  {% endfor %}
+                                              </tbody>
+                                              <tfoot>
+                                                  <tr>
+                                                      <th colspan="3" class="text-right">Sub Total:</th>
+                                                      <th class="text-center">₹{{subTotal}}</th>
+                                                  </tr>
+                                                  <tr>
+                                                      <th colspan="3" class="text-right">Tax:</th>
+                                                      <th class="text-center">₹{{order.tax}}</th>
+                                                  </tr>
+
+                                                  {% if order.order_discount %}
+
+                                                  <tr>
+                                                    <th colspan="3" class="text-right">Discount :</th>
+                                                    <th class="text-center">- ₹{{order.order_discount}} </th>
+                                                  </tr>
+        
+                                                  {% endif %}
+                                                  
+                                                  <tr>
+                                                      <th colspan="3" class="text-right">Grand Total:</th>
+                                                      <th class="text-center">₹{{order.order_total}}</th>
+                                                  </tr>
+                                              </tfoot>
+                                          </table>
+                                      </div>
+                                  </div>
+                                  <div class="invoice-footer mt25">
+                                      <p class="text-center">Thank you for shopping with us!</p>
+                                  </div>
+                              </div>
+                              <!-- col-lg-12 end here -->
+                          </div>
+                          <!-- End .row -->
+                      </div>
+                  </div>
+                  <!-- End .panel -->
+              </div>
+              <!-- col-lg-12 end here -->
+          </div>
+          </div>
+ 
+
+      </article> <!-- order-group.// --> 
+    </main>
+  </div> <!-- row.// -->
+  </div>
+  
+  
+  </section>
+  <!-- ========================= SECTION CONTENT END// ========================= -->
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.1/jquery.min.js" integrity="sha512-aVKKRRi/Q/YV+4mjoKBsE4x3H+BkegoM/em46NNlCqNTmUYADjBbeNefNxYV7giUp0VxICtqdrbqU7iVaeZNXA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+  <script>
+    {% for item in order_details %}
+
+    var qnty = $('#qnty{{forloop.counter}}').html()
+    var price = $('#price{{forloop.counter}}').html()
+    var total = qnty * price
+    $('#total{{forloop.counter}}').html('₹'+total)
+    console.log(total)
+
+    {% endfor %}
+  </script>
+
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.22/pdfmake.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.4.1/html2canvas.min.js"></script>
+    <!-- script for for pdf creation -->
+    
+    <script type="text/javascript">
+        $("body").on("click", "#btnExport", function () {
+            html2canvas($('#invoice')[0], {
+                onrendered: function (canvas) {
+                    var data = canvas.toDataURL();
+                    var docDefinition = {
+                        content: [{
+                            image: data,
+                            width: 500
+                        }]
+                    };
+                    pdfMake.createPdf(docDefinition).download("invoice.pdf");
+                }
+            });
+        });
+    </script>
+  
+
+{% endblock content %}

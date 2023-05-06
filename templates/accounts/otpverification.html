@@ -1,0 +1,60 @@
+
+{% extends 'base.html'%}
+
+
+{%block title %}
+pillow mart
+{% endblock %}
+
+{%block content %}
+{% load static %}
+<!-- breadcrumb part start-->
+<section class="breadcrumb_part">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="breadcrumb_iner">
+                    <h2>verification</h2>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- breadcrumb part end-->
+<!-- otp verification start-->
+<div class="container" style="min-height: 33rem;">
+    <form method="POST" action="{% url 'verify_otp' %}" class="d-flex justify-content-center align-items-center container">
+        {% csrf_token %}
+        <div class="card py-5 px-5 mt-5">
+            <h3 class="m-0 text-center">Mobile Number Verification</h3>
+            <span class="mt-3">Enter the code we just send to your mobile <b class="text-info">+91{{phone_number}}</b></span>
+            <div class="d-flex mx-auto flex-row mt-4 justify-content-center w-50">
+                <input
+                    type="text"
+                    class="form-control"
+                    autofocus=""
+                    name="otp"
+                    maxlength="6"
+                    {% comment %} required {% endcomment %}
+                />
+            </div>
+            <div class="d-flex flex-row mt-3 justify-content-center">
+                <button
+                    type="submit"
+                    class="btn btn-warning">
+                    Verify
+                </button>
+            </div>
+            <div class="text-center mt-3">
+                <span class="d-block mobile-text">Did not receive the code?</span>
+                <span class="text-danger cursor" id="timer"></span>
+                <a href="" class="font-weight-bold text-primary cursor" style="display: none;" id="resend">Resend</a>
+                {% for message in messages %}
+                <hr />
+                <p class="text-danger">{{message}}</p>
+                {% endfor%}
+            </div>
+        </div>
+    </form>
+</div>
+{% endblock %}

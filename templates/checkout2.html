@@ -1,0 +1,208 @@
+{% extends 'base.html' %}
+
+
+{% load static %}
+
+{% block content %}
+
+<!-- breadcrumb part start-->
+<section class="breadcrumb_part">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="breadcrumb_iner">
+                    <h2>Checkout</h2>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- breadcrumb part end-->
+
+<!-- Checkout Section Begin -->
+<section class="checkout spad">
+    <div class="container">
+        <div class="checkout__form">
+            <h4 class="mt-5 order_box">Billing Details</h4>
+            <form action="{% url 'place_order' %}" method="POST">
+                {% csrf_token %}
+                <div class="row">
+                    <div class="col-lg-8 col-md-6">
+                        <div class="card mb-3 order_box">
+
+                            {% if address %}
+
+                            <h5 class="card-header text-white" style="background-color: #B08EAD;">DELIVERY ADDRESS</h5>    
+
+                            {% for item in address %}
+
+                            <div class="card-body form-check row">
+                                    <div class="col-12">
+            
+                                        {% if forloop.counter == 1 %}
+                                        <input class="form-check-input d-block ml-1 mt-2" value="{{item.id}}" type="radio" name="flexRadioDefault" checked>
+                                        {%else%}
+                                        <input class="form-check-input d-block ml-1 mt-2" value="{{item.id}}" type="radio" name="flexRadioDefault">
+                                        {%endif%}
+                                        
+                                        <div class="d-block ml-4">
+                                            <p class="card-text mb-0"><b>{{item.full_name}}</b> , {{item.address_line1}}, {{item.address_line2}}, {{item.city}}, {{item.district}}, {{item.state}}, {{item.pincode}}</p>
+                                            <p class="cart-text mb-0">{{item.email}}</p>
+                                            <p class="cart-text mb-0">{{item.phone}}</p>
+                                        </div>
+                                    </div>              
+                                </div>                           
+                                <hr>
+                            {%endfor%}
+                            <div class="card-body form-check row">
+                                <div class="col-12  py-2">
+                                    <div class="row d-flex align-content-center">
+                                        <div class="col-12 d-block ml-2 d-flex">
+                                            <p class="card-text mt-1 h5"><b class="text-center">Add New Address</b></p>
+                                            <a href="{% url 'add_address' %}" class="col-3 btn ml-auto mr-5 text-white"  style="background-color: #B08EAD;">Add</a>
+                                        </div>
+                                    </div>
+                                    
+                                </div>              
+                            </div>
+                            {%else%}
+                            <div class="card-body form-check row d-flex align-items-center" style="height: 328px;">
+                                <div class="col-12  py-5">
+                                    <div class="row d-flex align-content-center">
+                                        <div class="col-12 d-block ml-2">
+                                            <p class="card-text mb-0 h2 text-center"><b>No addresses found in your account!</b></p>
+                                        </div>
+                                        <a href="{% url 'add_address' %}" class="col-3 btn_3 text-white mx-auto mt-3"  style="background-color: #7fad39;">Add Address</a>
+                                    </div>
+                                    
+                                </div>              
+                            </div>
+                            {%endif%}                          
+
+                        </div>
+
+                                <form action="#">
+                                </form>
+
+
+                        
+                        <div class="shoping__continue">
+                            <div class="shoping__discount">
+                                <h5>Discount Codes</h5>
+                                <form id="coupon_form">
+                                    <input type="text" id="coupon_data" placeholder="Enter your coupon code">
+                                    <button type="submit" class="site-btn text-white"style="background-color: #B08EAD;">APPLY COUPON</button>
+                                </form>
+                            </div>
+                            <p class="text-danger mt-3" id="output"></p>
+                        </div>
+
+                        {% if coupons %}
+                        <div class="accordion mt-3 shoping__discount" id="accordionExample">
+                            <h5>Available Coupons:</h5>
+                            
+                            {% for item in coupons %}
+
+                            <div class="card w-75">
+                              <div class="card-header" id="headingThree">
+                                <h2 class="mb-0">
+                                  <button class="btn btn-link btn-block text-left collapsed text-danger text-decoration-none" type="button" data-toggle="collapse" data-target="#collapse{{forloop.counter}}" aria-expanded="false" aria-controls="collapseThree">
+                                    <span class="text-dark">{{forloop.counter}}.</span> <b>-{{item.coupon.discount}}% Off</b>
+                                  </button>
+                                </h2>
+                              </div>
+                              <div id="collapse{{forloop.counter}}" class="collapse" aria-labelledby="headingThree" data-parent="#accordionExample">
+                                <div class="card-body">
+                                    <p><b>*</b>Applicable only  for order price more than <b>₹{{item.coupon.min_value}}\-</b></p>
+                                    <span class="ml-3">Coupon Code: <b class="text-danger">{{item.coupon.code}}</b></span>
+                                </div>
+                              </div>
+                            </div>
+
+                            {% endfor %}
+
+                        </div>
+                        {%endif%}
+
+                    </div>
+                    <div class="col-lg-4 col-md-6">
+                        <div class="order_box">
+                            <h4>Your Order</h4>
+                            <div class="checkout__order__products">Products <span>Price</span></div>
+                            <ul>
+                                {% for cart_item in cart_items %}
+
+                                <li>{{cart_item.product.product_name}} <br>
+
+                                   
+                                    
+                                     <p class="d-inline font-weight-bold">{{cart_item.quantity}}</p class="d-inline f-3"><span>{{cart_item.sub_total}}</span></li>
+
+                                     <hr>
+
+                                {% endfor %}
+                            </ul>
+                            <div class="checkout__order__total mb-3">Subtotal <span>${{total_price}}</span></div>
+                            <div class="checkout__order__total mb-3">Tax <span>₹{{tax}}</span></div>
+                            <div class="checkout__order__total mb-3" id="coupon_block" style="display: none;">Discount <span><b id="coupon_discount"></b></span>
+                            <h1 class="text-danger" style="font-size: 12px;">*Coupon Applied - <b id="coupon_code"></b></h1>
+                            </div>
+                            <div class="checkout__order__total mb-3">Total <span id='grand_total'>${{grand_total}}</span></div>
+                            <input type="text" name="coupon" id="coupon_code1" style="display: none;">
+                            <button type="submit" class="btn mb-3 text-white " style="background-color: #B08EAD;">Place order</button>
+                        </div>
+                    </div> 
+
+
+                   
+            </div>
+            </form>
+        </div>
+    </div>
+</section>
+<!-- Checkout Section End -->
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.1/jquery.min.js" integrity="sha512-aVKKRRi/Q/YV+4mjoKBsE4x3H+BkegoM/em46NNlCqNTmUYADjBbeNefNxYV7giUp0VxICtqdrbqU7iVaeZNXA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+<script>
+    $('#coupon_form').on('submit', function(e){
+             
+        e.preventDefault();
+        
+          $.ajax({
+               type : "POST", 
+               url: "{% url 'coupon' %}",
+               data: {
+                   coupon : $('#coupon_data').val(),
+                   grand_total : '{{grand_total}}',
+                csrfmiddlewaretoken: '{{ csrf_token }}',
+                dataType: "json",
+        
+               },
+               
+               success: function(data){
+                  $('#output').html(data.msg) /* response message */
+                  $('#grand_total').text('₹'+data.grand_total)
+                  if (data.coupon_discount > 0) {
+                      $('#coupon_block').show()
+                      $('#accordionExample').hide()
+                  }
+                  $('#coupon_discount').html(data.coupon_discount)
+                  $('#coupon_code').html(data.coupon_code)
+                  $('#coupon_code1').val(data.coupon_code)
+
+                  
+               },
+        
+               failure: function() {
+                   
+               }
+        
+        
+           });
+        
+        
+                });  
+</script>
+
+{% endblock content %}

@@ -1,0 +1,192 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block content %}
+
+
+<!-- breadcrumb part start-->
+<section class="breadcrumb_part">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="breadcrumb_iner">
+                    <h2>Order Confirmed</h2>
+                </div>
+            </div>
+        </div>
+    </div>
+  </section>
+  <!-- breadcrumb part end-->
+<div class="py-5">
+  <div class="container">
+       
+      <div class="row">
+          <div class="col-md-12 mt-5">
+              <div class="card shadow">
+                  <div class="card-body text-center">
+                      <img width="100px" src="{% static 'img/order_confirm.webp' %}" alt="">
+                   
+                      <h4>Your item will be delivered soon</h4>
+                      <h3 class="text-danger">Thank you for your purchase!!</h3>
+                      <h4>Your tracking number is : 
+                          
+                              {{order.order_number}}
+
+                      </h4>
+                      <div class="row py-3 d-flex justify-content-center">
+                          <div class="col-4">
+                              <a href="{% url 'home' %}" class="btn text-white" style="background-color: #B08EAD;">Home</a>
+                              <input type="button" class="btn ml-5 text-white"style="background-color: #B08EAD;" id="btnExport" value="Download Invoice" />
+                          </div>
+                      </div>
+                      
+                <div class="container" style="background: #f1f1f1;" id="invoice">
+                    <div class="row invoice row-printable">
+                        <div class="col-md-12">
+                            <!-- col-lg-12 start here -->
+                            <div class="panel panel-default plain" id="dash_0">
+                                <!-- Start .panel -->
+                                <div class="panel-body p30">
+                                    <div class="row">
+                                        <!-- Start .row -->
+                                        <div class="col-lg-6">
+                                            <!-- col-lg-6 start here -->
+                                            <div class="invoice-details mt25">
+                                                <div class="well">
+                                                    <ul class="list-unstyled text-left mt-3">
+
+                                                        <li><strong>Order Date:</strong> {{order.created_at}}</li>
+                                                        <li><strong>Payment Method:</strong> {{payment.payment_method}}</li>
+                                                        <li><strong>Status:</strong> Not Paid</li>
+                                                        
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- col-lg-6 end here -->
+                                        <div class="col-lg-6">
+                                            <!-- col-lg-6 start here -->
+                                            <div class="invoice-from">
+                                                <ul class="list-unstyled text-right mt-3 mr-3">
+                                                    <li><strong>Shipping Address</strong></li>
+                                                    <li>{{order.full_name}}</li>
+                                                    <li>{{order.full_address}}</li>
+                                                    <li>{{order.city}}, {{order.state}}</li>
+                                                    <li>{{order.district}}</li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                        <!-- col-lg-6 end here -->
+                                        <div class="col-lg-12 mt-5 mb-5">
+                                            <!-- col-lg-12 start here -->
+                                            <div class="invoice-items">
+                                                <div class="table-responsive" style="overflow: hidden; outline: none;" tabindex="0">
+                                                    <table class="table" style="border:1px solid black">
+                                                        <thead class="text-white"style="background-color: #B08EAD;">
+                                                            <tr>
+                                                                <th class="per70 text-center">Products</th>
+                                                                <th class="per5 text-center">Qty</th>
+                                                                <th class="per5 text-center">Price</th>
+                                                                <th class="per25 text-center">Total</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody >
+                                                            {% for item in ordered_products %}
+                                                            <tr >
+                                                                <td style="border:1px solid black" >{{item.product.product_name}}
+                                                             
+                                                                </td>
+                                                                <td class="text-center" id="qnty{{forloop.counter}}" style="border:1px solid black">{{item.quantity}}</td>
+                                                                <td class="text-center" id="price{{forloop.counter}}" style="border:1px solid black">{{item.product_price}} </td>
+                                                                <td class="text-center" id="total{{forloop.counter}}" style="border:1px solid black"></td>
+                                                            </tr>
+                                                            {% endfor %}
+                                                        </tbody>
+                                                        <tfoot>
+                                                            <tr>
+                                                                <th colspan="3" class="text-right">Sub Total:</th>
+                                                                <th class="text-center">₹{{subtotal}} </th>
+                                                            </tr>
+                                                            <tr>
+                                                                <th colspan="3" class="text-right">Tax :</th>
+                                                                <th class="text-center">₹{{order.tax}} </th>
+                                                            </tr>
+
+                                                            {% if order.order_discount %}
+
+                                                            <tr>
+                                                                <th colspan="3" class="text-right">Discount :</th>
+                                                                <th class="text-center">- ₹{{order.order_discount}} </th>
+                                                            </tr>
+
+                                                            {% endif %}
+
+                                                            <tr>
+                                                                <th colspan="3" class="text-right">Grand Total:</th>
+                                                                <th class="text-center">₹{{order.order_total}} </th>
+                                                            </tr>
+                                                        </tfoot>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                            <div class="invoice-footer mt25">
+                                                <p class="text-center">Thank you for shopping with us!
+                                                    <br>
+                                                    <b>Your order will be delivered soon...</b>
+                                                </p>
+                                            </div>
+                                        </div>
+                                        <!-- col-lg-12 end here -->
+                                    </div>
+                                    <!-- End .row -->
+                                </div>
+                            </div>
+                            <!-- End .panel -->
+                        </div>
+                        <!-- col-lg-12 end here -->
+                    </div>
+                  </div>
+            </div>
+        </div>
+          
+      </div>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.1/jquery.min.js" integrity="sha512-aVKKRRi/Q/YV+4mjoKBsE4x3H+BkegoM/em46NNlCqNTmUYADjBbeNefNxYV7giUp0VxICtqdrbqU7iVaeZNXA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+<script>
+    {% for item in ordered_products %}
+
+    var qnty = $('#qnty{{forloop.counter}}').html()
+    var price = $('#price{{forloop.counter}}').html()
+    var total = qnty * price
+    $('#total{{forloop.counter}}').html('₹'+total)
+    var price = $('#price{{forloop.counter}}').html('₹'+price)
+
+    {% endfor %}
+</script>
+
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.22/pdfmake.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.4.1/html2canvas.min.js"></script>
+    <!-- script for for pdf creation -->
+    
+    <script type="text/javascript">
+        $("body").on("click", "#btnExport", function () {
+            html2canvas($('#invoice')[0], {
+                onrendered: function (canvas) {
+                    var data = canvas.toDataURL();
+                    var docDefinition = {
+                        content: [{
+                            image: data,
+                            width: 500
+                        }]
+                    };
+                    pdfMake.createPdf(docDefinition).download("invoice.pdf");
+                }
+            });
+        });
+    </script>
+
+{% endblock content %}
