@@ -25,7 +25,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-1@h4=e_rwsbfq8s1d8xsmaly9y*@0cl%_9vx-gfdurk(&hmo*b'
 # SECURITY WARNING: don't run with debug turned on in production!
 # DEBUG = True
-DEBUG = config('DEBUG',default=True , cast=bool)
+DEBUG= True
 ALLOWED_HOSTS = ['*']
 
 
@@ -88,12 +88,12 @@ AUTH_USER_MODEL = 'accounts.Account'
 DATABASES = {
     'default': {
       'ENGINE':'django.db.backends.postgresql_psycopg2',
-      'NAME': config('NAME'),
-      'USER': config('USER'),
-      'PASSWORD': config('PASSWORD'),
-      'HOST': config('HOST'),
-      'PORT': config('PORT'),
-        
+      'NAME':'project',
+      'USER': 'postgres',
+      'PASSWORD':'maryamnooh*1',
+      'HOST':'localhost',
+      'PORT':'5432',
+
     }
 }
 
