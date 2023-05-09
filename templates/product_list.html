@@ -80,7 +80,7 @@ pillow mart
                                   </svg></a>
                                     <h3 class="text-center"> <a  href="{{ product.get_url }}" >{{i.product_name}}</a> </h3>
                                     {% if i.offer_price != i.price %}
-                                      <span class="p-5"style="margin-left:100px;"><del class="text-secondary">₹{{i.price}}</del> ₹{{i.offer_price}}</span>
+                                      <span class="p-5"style="margin-left:100px;"><del class="text-secondary">{{i.price}}</del> ${{i.offer_price}}</span>
                                       {% else %}
                                       <span>₹{{i.price}}</span>
                                       {% endif %}

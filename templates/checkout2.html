@@ -113,7 +113,7 @@
                               </div>
                               <div id="collapse{{forloop.counter}}" class="collapse" aria-labelledby="headingThree" data-parent="#accordionExample">
                                 <div class="card-body">
-                                    <p><b>*</b>Applicable only  for order price more than <b>₹{{item.coupon.min_value}}\-</b></p>
+                                    <p><b>*</b>Applicable only  for order price more than <b>${{item.coupon.min_value}}\-</b></p>
                                     <span class="ml-3">Coupon Code: <b class="text-danger">{{item.coupon.code}}</b></span>
                                 </div>
                               </div>
@@ -143,7 +143,7 @@
                                 {% endfor %}
                             </ul>
                             <div class="checkout__order__total mb-3">Subtotal <span>${{total_price}}</span></div>
-                            <div class="checkout__order__total mb-3">Tax <span>₹{{tax}}</span></div>
+                            <div class="checkout__order__total mb-3">Tax <span>${{tax}}</span></div>
                             <div class="checkout__order__total mb-3" id="coupon_block" style="display: none;">Discount <span><b id="coupon_discount"></b></span>
                             <h1 class="text-danger" style="font-size: 12px;">*Coupon Applied - <b id="coupon_code"></b></h1>
                             </div>

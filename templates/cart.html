@@ -60,7 +60,7 @@ pillow mart
                   </div>
                 </td>
                 <td>
-                  <h5>{{i.product.offer_price}}</h5>
+                  <h5>${{i.product.offer_price}}</h5>
                 </td>
                 <td>
                   <div class="product_count">
@@ -73,7 +73,7 @@ pillow mart
                   </div>
                 </td>
                  <td>
-                  <h5>{{i.total}}</h5>
+                  <h5>${{i.total}}</h5>
                 </td>
                 <td>
                     <a href="{% url 'RemoveFromCart' i.id %}" class="text-danger"><i class="fas fa-times"></i></a>
@@ -90,7 +90,7 @@ pillow mart
                   <h5>Subtotal</h5>
                 </td>
                 <td>
-                  <h5> {{product_price}}</h5>
+                  <h5> ${{product_price}}</h5>
                 </td>
               </tr>
               <tr class="shipping_area">
@@ -126,7 +126,7 @@ pillow mart
                         
                       </li>
                       <li>
-                        <h4 class="">  {{grand_total}}</h4>
+                        <h4 class=""> $ {{grand_total}}</h4>
                        
                         
                       </li>
