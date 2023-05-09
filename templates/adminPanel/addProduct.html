@@ -93,6 +93,10 @@
           <label for="product_name">Product Name:</label>
           <input type="text" class="form-control" id="product_name" name="product_name" maxlength="200" required>
         </div>
+        {% comment %} <div class="form-group">
+          <label for="product_name">Slug</label>
+          <input type="text" class="form-control" id="slug" name="slug" maxlength="200" required>
+        </div> {% endcomment %}
         <div class="form-group">
           <label for="description">Description:</label>
           <textarea class="form-control" id="description" name="description" maxlength="500"></textarea>
@@ -172,7 +176,7 @@
     <!-- FontAwesome CSS - loading as last, so it doesn't block rendering-->
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.1/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
     
-    <script>
+    {% comment %} <script>
 	
       var imagebox_1 = document.getElementById('image-box_1')
         
@@ -243,6 +247,6 @@
           });
       });
 
-    </script>
+    </script> {% endcomment %}
   </body>
 </html>
