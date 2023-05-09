@@ -251,7 +251,7 @@ def cash_on_delivery(request,id):
             order_product.user_id =  request.user.id
             order_product.product_id = cart_item.product_id
             order_product.quantity =  cart_item.quantity
-            order_product.product_price = cart_item.product.offer_price
+            order_product.product_price = cart_item.total()
             order_product.ordered = True
             order_product.save()
             
