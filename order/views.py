@@ -228,7 +228,7 @@ def return_order(request, id):
 
 def cash_on_delivery(request,id):
     # Move cart item to ordered product table
-    try:
+    # try:
         order = Order.objects.get(user = request.user, order_number = id)
         cart_items = CartcartItem.objects.filter(user = request.user)
         order.is_ordered = True
@@ -251,7 +251,7 @@ def cash_on_delivery(request,id):
             order_product.user_id =  request.user.id
             order_product.product_id = cart_item.product_id
             order_product.quantity =  cart_item.quantity
-            order_product.product_price = total()
+            order_product.product_price = cart_item.product.offer_price
             order_product.ordered = True
             order_product.save()
             
@@ -280,5 +280,5 @@ def cash_on_delivery(request,id):
           'subtotal':subtotal,
              }
         return render(request,'cod_success.html',context)
-    except:
+    # except:
         return redirect('home')
