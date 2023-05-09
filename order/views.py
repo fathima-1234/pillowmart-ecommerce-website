@@ -67,8 +67,13 @@ def place_order(request, total=0, quantity=0):
   
   cart_items = CartcartItem.objects.filter(user=current_user)
   cart_count = cart_items.count()
+  address = Address.objects.filter(user=current_user)
   if cart_count <= 0:
     return redirect('product_list')
+  if not address:
+    messages.error(request,'Add address to place the order')
+    return redirect('checkout2')
+
   
   grand_total = 0
   tax = 0
